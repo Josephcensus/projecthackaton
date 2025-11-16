@@ -1,61 +1,80 @@
-import { NextResponse } from "next/server";
+"use client";
+import { useState } from "react";
 
-export async function POST(req) {
-  try {
-    const { message } = await req.json();
+export default function Home() {
+  const [message, setMessage] = useState("");
+  const [reply, setReply] = useState("");
 
-    if (!message) {
-      return NextResponse.json(
-        { reply: "Please type a message." },
-        { status: 400 }
-      );
-    }
+  const sendMessage = async () => {
+    if (!message.trim()) return;
 
-    const text = message.toLowerCase();
-    let reply = "";
+    const res = await fetch("/api/reply", {
+      method: "POST",
+      body: JSON.stringify({ message }),
+    });
 
-    // --- AI BOT LOGIC ---
+    const data = await res.json();
+    setReply(data.reply);
+  };
 
-    if (text.includes("hello") || text.includes("hi")) {
-      reply = "Hello 👋 I'm the CARV Hackathon Support Bot. How can I help you today?";
-    }
+  return (
+    <main
+      style={{
+        minHeight: "100vh",
+        backgroundColor: "#000000",
+        padding: "20px",
+        color: "white",
+      }}
+    >
+      <h1 style={{ fontSize: "32px", marginBottom: "20px" }}>
+        CARV Hackathon Auto-Reply Agent 🤖
+      </h1>
 
-    else if (text.includes("what is carv") || text.includes("carv")) {
-      reply =
-        "CARV is an AI-powered ecosystem enabling builders to create apps, DeFi tools, games, agents, and more on the SVM Testnet.";
-    }
+      <textarea
+        style={{
+          width: "100%",
+          height: "150px",
+          padding: "15px",
+          borderRadius: "10px",
+          fontSize: "18px",
+          border: "1px solid #555",
+          backgroundColor: "black",
+          color: "white",
+        }}
+        placeholder="Type your message..."
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+      />
 
-    else if (text.includes("reward") || text.includes("prize")) {
-      reply =
-        "🏆 CARV Hackathon Rewards:\n• Community’s Favorite: 2000 / 1000 / 800 $CARV\n• Team’s Choice: 3200 / 2000 / 1000 $CARV";
-    }
+      <button
+        onClick={sendMessage}
+        style={{
+          width: "100%",
+          marginTop: "20px",
+          padding: "15px",
+          backgroundColor: "#6C47FF",
+          color: "white",
+          borderRadius: "10px",
+          fontSize: "20px",
+          border: "none",
+        }}
+      >
+        Send
+      </button>
 
-    else if (text.includes("join") || text.includes("how do i join")) {
-      reply =
-        "To join the CARV Hackathon:\n1️⃣ Read the official guidelines.\n2️⃣ Submit your project via the official form.\nYou can build using Vercel, Replit, or Solana Playground.";
-    }
-
-    else if (text.includes("testnet") || text.includes("svm")) {
-      reply =
-        "The CARV SVM Testnet allows developers to deploy apps, bots, tools, and games. It's easy to use with accessible tools like Vercel and Replit.";
-    }
-
-    else if (text.includes("help") || text.includes("guide")) {
-      reply =
-        "Sure! Tell me what you need help with — setup, API, idea, or deployment? I'm here for you.";
-    }
-
-    else {
-      reply =
-        "Got your message! 😊 I'm here to assist with anything related to the CARV Hackathon.";
-    }
-
-    return NextResponse.json({ reply });
-
-  } catch (error) {
-    return NextResponse.json(
-      { error: "Invalid request" },
-      { status: 400 }
-    );
-  }
+      {reply && (
+        <div
+          style={{
+            backgroundColor: "#1E3A8A", // 🔵 BLUE REPLY BACKGROUND
+            padding: "20px",
+            borderRadius: "12px",
+            marginTop: "25px",
+          }}
+        >
+          <strong style={{ color: "white" }}>Reply:</strong>{" "}
+          <span style={{ color: "red" }}>{reply}</span> {/* 🔴 RED REPLY TEXT */}
+        </div>
+      )}
+    </main>
+  );
 }
