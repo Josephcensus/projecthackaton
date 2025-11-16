@@ -73,26 +73,21 @@ export default function Home() {
         }}
       >
         {loading ? "Generating reply…" : "Send"}
-      </button>
-
-      {/* Reply section */}
-      {reply && (
-        <div
-          style={{
-            backgroundColor: "#FFE68A", // Yellow background
-            padding: "20px",
-            borderRadius: "12px",
-            marginTop: "25px",
-            color: "black",
-            fontSize: "18px",
-            lineHeight: "1.6",
-            fontWeight: "500",
-            border: "1px solid #E6C75F" // Soft outline
-          }}
-        >
-          <strong style={{ color: "black" }}>Reply:</strong> {reply}
-        </div>
-      )}
-    </main>
-  );
-        }
+</ </button>  
+{repy && (
+  <div
+    style={{
+      backgroundColor: "#FFF6BA",   // Yellow
+      padding: "20px",
+      borderRadius: "12px",
+      marginTop: "25px",
+      color: "#000000",              // TRUE BLACK TEXT
+      fontSize: "18px",
+      lineHeight: "1.6",
+      fontWeight: "500",
+      border: "1px solid #E6C75F"    // Light gold border
+    }}
+  >
+    <strong style={{ color: "#000000" }}>Reply:</strong> {reply}
+  </div>
+)}
