@@ -10,6 +10,7 @@ export default function Home() {
 
     const res = await fetch("/api/reply", {
       method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message }),
     });
 
@@ -49,14 +50,14 @@ export default function Home() {
       <button
         onClick={sendMessage}
         style={{
-          width: "100%",
           marginTop: "20px",
+          width: "100%",
           padding: "15px",
           backgroundColor: "#6C47FF",
           color: "white",
-          borderRadius: "10px",
           fontSize: "20px",
           border: "none",
+          borderRadius: "10px",
         }}
       >
         Send
@@ -65,16 +66,18 @@ export default function Home() {
       {reply && (
         <div
           style={{
-            backgroundColor: "#1E3A8A", // BLUE
+            backgroundColor: "#4C2AFF", // 💜 Purple background you wanted
             padding: "20px",
             borderRadius: "12px",
             marginTop: "25px",
+            color: "white",
+            fontSize: "18px",
+            lineHeight: "1.6",
           }}
         >
-          <strong style={{ color: "white" }}>Reply:</strong>{" "}
-          <span style={{ color: "red" }}>{reply}</span>
+          <strong style={{ color: "white" }}>Reply:</strong> {reply}
         </div>
       )}
     </main>
   );
-          }
+}
