@@ -71,18 +71,8 @@ export default function Home() {
       </form>
 
       {reply && (
-        <div
-          style={{
-            marginTop: 20,
-            padding: 15,
-            background: "#F5F5F5",
-            borderRadius: 8,
-            fontSize: 16,
-          }}
-        >
-          <strong>Reply:</strong> {reply}
-        </div>
-      )}
-    </main>
-  );
-}
+  <div className="mt-6 bg-yellow-300 text-black p-5 rounded-xl shadow-lg">
+    <p className="font-semibold text-lg">Reply:</p>
+    <p className="mt-2 text-base leading-relaxed">{reply}</p>
+  </div>
+)}
