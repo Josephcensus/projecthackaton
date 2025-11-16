@@ -5,74 +5,49 @@ import { useState } from "react";
 export default function Home() {
   const [message, setMessage] = useState("");
   const [reply, setReply] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  async function sendMessage(e: any) {
-    e.preventDefault();
+  const sendMessage = async () => {
     if (!message.trim()) return;
 
-    setLoading(true);
-    setReply("");
+    const res = await fetch("/api/reply", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message }),
+    });
 
-    try {
-      const res = await fetch("/api/reply", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message }),
-      });
-
-      const data = await res.json();
-      setReply(data.reply || "No reply received.");
-    } catch (err) {
-      setReply("Error: Unable to reach API.");
-    }
-
-    setLoading(false);
-  }
+    const data = await res.json();
+    setReply(data.reply);
+  };
 
   return (
-    <main style={{ maxWidth: 600, margin: "50px auto", padding: 20 }}>
-      <h1 style={{ fontSize: 28, marginBottom: 20 }}>
+    <main className="min-h-screen bg-[#000000] text-white flex flex-col items-center px-4 py-10">
+      <h1 className="text-3xl font-bold mb-8">
         CARV Hackathon Auto-Reply Agent 🤖
       </h1>
 
-      <form onSubmit={sendMessage}>
-        <textarea
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          placeholder="Type your message here..."
-          style={{
-            width: "100%",
-            height: 120,
-            padding: 12,
-            fontSize: 16,
-            borderRadius: 8,
-            border: "1px solid #ccc",
-          }}
-        />
+      {/* Input Box */}
+      <textarea
+        className="w-full max-w-xl h-40 p-4 rounded-xl bg-white text-black outline-none"
+        placeholder="Type your message..."
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+      />
 
-        <button
-          type="submit"
-          disabled={loading}
-          style={{
-            marginTop: 10,
-            padding: "12px 20px",
-            background: "#6A5ACD",
-            color: "white",
-            border: "none",
-            borderRadius: 8,
-            cursor: "pointer",
-            fontSize: 16,
-            width: "100%",
-          }}
-        >
-          {loading ? "Sending..." : "Send"}
-        </button>
-      </form>
+      {/* Send Button */}
+      <button
+        onClick={sendMessage}
+        className="mt-4 w-full max-w-xl py-3 bg-purple-600 hover:bg-purple-700 rounded-xl text-lg font-semibold"
+      >
+        Send
+      </button>
 
+      {/* Reply Box */}
       {reply && (
-  <div className="mt-6 bg-yellow-300 text-black p-5 rounded-xl shadow-lg">
-    <p className="font-semibold text-lg">Reply:</p>
-    <p className="mt-2 text-base leading-relaxed">{reply}</p>
-  </div>
-)}
+        <div className="mt-6 w-full max-w-xl p-4 bg-white text-black rounded-xl shadow-md">
+          <p className="font-semibold">Reply:</p>
+          <p>{reply}</p>
+        </div>
+      )}
+    </main>
+  );
+}
