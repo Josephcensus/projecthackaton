@@ -37,16 +37,17 @@ export default function Home() {
         padding: "40px",
         maxWidth: "700px",
         margin: "0 auto",
-        backgroundColor: "#ffffff",
+        backgroundColor: "#000000",
         minHeight: "100vh",
         fontFamily: "Arial, sans-serif",
+        color: "white",
       }}
     >
       <h1 style={{ fontSize: "32px", marginBottom: "20px" }}>
-        CarV Auto Reply
+        CARV Hackathon Auto-Reply Agent 🤖
       </h1>
 
-      {/* Input box */}
+      {/* Input Box */}
       <textarea
         value={message}
         onChange={(e) => setMessage(e.target.value)}
@@ -61,43 +62,42 @@ export default function Home() {
         }}
       />
 
-      {/* Send button */}
+      {/* Send Button */}
       <button
         onClick={sendMessage}
         disabled={loading}
         style={{
-          marginTop: "15px",
-          padding: "12px 20px",
-          fontSize: "16px",
-          backgroundColor: "#7C3AED",
-          color: "#FFF",
-          borderRadius: "10px",
-          border: "none",
-          cursor: "pointer",
           width: "100%",
+          padding: "15px",
+          marginTop: "20px",
+          backgroundColor: "#FFD700", // YELLOW
+          border: "none",
+          borderRadius: "10px",
+          fontSize: "18px",
+          fontWeight: "bold",
+          cursor: "pointer",
         }}
       >
-        {loading ? "Generating reply..." : "Send"}
+        {loading ? "Sending..." : "Send"}
       </button>
 
-      {/* Yellow Reply Box */}
+      {/* Reply Box */}
       {reply && (
         <div
           style={{
-            backgroundColor: "#FFF68A", // Yellow
+            marginTop: "30px",
             padding: "20px",
-            marginTop: "25px",
-            borderRadius: "12px",
-            border: "1px solid #E6C75F", // Light gold
-            color: "#000000",
+            backgroundColor: "#ffffff",
+            borderRadius: "10px",
+            border: "1px solid #ddd",
+            color: "#000000", // <<< BLACK TEXT (now visible)
             fontSize: "18px",
-            lineHeight: "1.6",
-            fontWeight: "500",
+            lineHeight: "1.5",
           }}
         >
-          <strong style={{ color: "#000000" }}>Reply:</strong> {reply}
+          <strong>Reply:</strong> {reply}
         </div>
       )}
     </main>
   );
-              }
+              }              }
