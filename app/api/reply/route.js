@@ -9,14 +9,15 @@ export async function POST(req) {
     });
 
     const prompt = `
-You are the CARV Hackathon Auto-Reply Bot.
-Answer all questions simply and clearly.
-If user asks about "DeFi tools", answer what DeFi tools are.
-If user asks anything CARV-related, explain it correctly.
+    You are the CARV Hackathon Auto-Reply Bot.
+    Answer all questions simply and clearly.
+    If user asks about "DeFi tools", explain what DeFi tools are.
+    If user asks anything CARV-related, explain it correctly.
 
-User: ${message}
-`;
+    User: ${message}
+    `;
 
+    // ✅ NEW FORMAT — WORKS WITH GPT MODELS
     const response = await client.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
@@ -29,9 +30,8 @@ User: ${message}
     const aiReply = response.choices[0].message.content;
 
     return Response.json({ reply: aiReply });
-
   } catch (error) {
-    console.error(error);
+    console.error("API Error:", error);
     return Response.json({ reply: "Error generating reply." });
   }
 }
