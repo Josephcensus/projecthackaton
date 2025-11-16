@@ -29,7 +29,7 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-yellow text-black p-6">
+    <main className="min-h-screen bg-black text-white p-6">
       <h1 className="text-3xl font-bold mb-4">
         CARV Hackathon Auto-Reply Agent 🤖
       </h1>
