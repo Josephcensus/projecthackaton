@@ -65,19 +65,18 @@ export default function Home() {
 
       {reply && (
         <div
-          style={{
-            backgroundColor: "#4C2AFF", // 💜 Purple background you wanted
-            padding: "20px",
-            borderRadius: "12px",
-            marginTop: "25px",
-            color: "white",
-            fontSize: "18px",
-            lineHeight: "1.6",
-          }}
-        >
-          <strong style={{ color: "white" }}>Reply:</strong> {reply}
-        </div>
-      )}
-    </main>
-  );
-}
+          {reply && (
+  <div
+    style={{
+      backgroundColor: "#FFE68A", // Light Yellow
+      padding: "20px",
+      borderRadius: "12px",
+      marginTop: "25px",
+      color: "black",   // TEXT WILL BE BLACK ✔
+      fontSize: "18px",
+      lineHeight: "1.6",
+    }}
+  >
+    <strong style={{ color: "black" }}>Reply:</strong> {reply}
+  </div>
+)}
