@@ -64,8 +64,6 @@ export default function Home() {
       </button>
 
       {reply && (
-        <div
-          {reply && (
   <div
     style={{
       backgroundColor: "#FFE68A", // Light Yellow
