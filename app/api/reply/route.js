@@ -1,40 +1,37 @@
-import { NextResponse } from "next/server";
+import OpenAI from "openai";
 
 export async function POST(req) {
   try {
     const { message } = await req.json();
 
-    if (!message) {
-      return NextResponse.json(
-        { reply: "Please type a message." },
-        { status: 400 }
-      );
-    }
+    const client = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
 
-    const text = message.toLowerCase();
-    let reply = "";
+    const prompt = `
+You are the CARV Hackathon Auto-Reply Bot.
+Answer all questions simply and clearly.
+If user asks about "DeFi tools", answer what DeFi tools are.
+If user asks anything CARV-related, explain it correctly.
 
-    if (text.includes("hello") || text.includes("hi")) {
-      reply = "Hello 👋 I'm the CARV Hackathon Support Bot. How can I help you today?";
-    } else if (text.includes("what is carv") || text.includes("carv")) {
-      reply = "CARV is an AI-powered ecosystem enabling builders to create apps, DeFi tools, games, agents, and more.";
-    } else if (text.includes("reward") || text.includes("prize")) {
-      reply = "🏆 Hackathon Rewards:\n• Community: 2000 / 1000 / 800 $CARV\n• Team Choice: 3200 / 2000 / 1500";
-    } else if (text.includes("join") || text.includes("how do i join")) {
-      reply = "To join the CARV Hackathon:\n1️⃣ Read the guidelines.\n2️⃣ Submit your project.\n3️⃣ You’re all set!";
-    } else if (text.includes("testnet") || text.includes("swn")) {
-      reply = "The CARV SWN Testnet allows developers to build apps, bots, and more.";
-    } else if (text.includes("help") || text.includes("guide")) {
-      reply = "Sure! Tell me what you need help with — setup, API, idea, or deployment?";
-    } else {
-      reply = "Got your message! 😊 I'm here to assist with anything related to the CARV Hackathon.";
-    }
+User: ${message}
+`;
 
-    return NextResponse.json({ reply });
+    const response = await client.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        { role: "system", content: "You are a helpful assistant." },
+        { role: "user", content: prompt },
+      ],
+      max_tokens: 150,
+    });
+
+    const aiReply = response.choices[0].message.content;
+
+    return Response.json({ reply: aiReply });
+
   } catch (error) {
-    return NextResponse.json(
-      { error: "Invalid request" },
-      { status: 400 }
-    );
+    console.error(error);
+    return Response.json({ reply: "Error generating reply." });
   }
 }
