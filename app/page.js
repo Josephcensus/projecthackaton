@@ -37,7 +37,7 @@ export default function Home() {
         padding: "40px",
         maxWidth: "700px",
         margin: "0 auto",
-        backgroundColor: "#ffffff",  // FIXED: White background
+        backgroundColor: "#ffffff",
         minHeight: "100vh",
         fontFamily: "Arial, sans-serif",
       }}
@@ -61,4 +61,43 @@ export default function Home() {
         }}
       />
 
-      {/* Send
+      {/* Send button */}
+      <button
+        onClick={sendMessage}
+        disabled={loading}
+        style={{
+          marginTop: "15px",
+          padding: "12px 20px",
+          fontSize: "16px",
+          backgroundColor: "#7C3AED",
+          color: "#FFF",
+          borderRadius: "10px",
+          border: "none",
+          cursor: "pointer",
+          width: "100%",
+        }}
+      >
+        {loading ? "Generating reply..." : "Send"}
+      </button>
+
+      {/* Yellow Reply Box */}
+      {reply && (
+        <div
+          style={{
+            backgroundColor: "#FFF68A", // Yellow
+            padding: "20px",
+            marginTop: "25px",
+            borderRadius: "12px",
+            border: "1px solid #E6C75F", // Light gold
+            color: "#000000",
+            fontSize: "18px",
+            lineHeight: "1.6",
+            fontWeight: "500",
+          }}
+        >
+          <strong style={{ color: "#000000" }}>Reply:</strong> {reply}
+        </div>
+      )}
+    </main>
+  );
+              }
