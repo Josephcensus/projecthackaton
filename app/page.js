@@ -1,3 +1,4 @@
+// app/page.js
 "use client";
 
 import { useState } from "react";
@@ -8,27 +9,26 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
 
   const sendMessage = async () => {
-    setReply("");
+    // don't send empty
     if (!message.trim()) return;
-
     setLoading(true);
+    setReply(""); // clear previous
 
     try {
       const res = await fetch("/api/reply", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message }),
       });
 
       const data = await res.json();
+      // backend returns { reply: "..." }
       setReply(data.reply || "No reply received.");
     } catch (err) {
       setReply("Error connecting to server.");
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
@@ -37,67 +37,74 @@ export default function Home() {
         padding: "40px",
         maxWidth: "700px",
         margin: "0 auto",
-        backgroundColor: "#000000",
         minHeight: "100vh",
+        backgroundColor: "#000", // page background black
+        color: "#fff",
         fontFamily: "Arial, sans-serif",
-        color: "white",
       }}
     >
       <h1 style={{ fontSize: "32px", marginBottom: "20px" }}>
-        CARV Hackathon Auto-Reply Agent 🤖
+        CARV Hackathon Auto Reply Agent 🤖
       </h1>
 
-      {/* Input Box */}
+      {/* Input */}
       <textarea
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         placeholder="Type a message..."
         style={{
           width: "100%",
-          height: "120px",
+          height: "150px",
           padding: "15px",
           borderRadius: "10px",
-          border: "1px solid #ccc",
+          border: "2px solid #666",
+          backgroundColor: "#000",
+          color: "#fff",
           fontSize: "16px",
+          boxSizing: "border-box",
         }}
       />
 
-      {/* Send Button */}
+      {/* Send button */}
       <button
         onClick={sendMessage}
         disabled={loading}
         style={{
-          width: "100%",
-          padding: "15px",
           marginTop: "20px",
-          backgroundColor: "#FFD700", // YELLOW
-          border: "none",
+          width: "100%",
+          padding: "16px 20px",
+          backgroundColor: "#6C47FF",
+          color: "#fff",
           borderRadius: "10px",
           fontSize: "18px",
-          fontWeight: "bold",
-          cursor: "pointer",
+          border: "none",
+          cursor: loading ? "default" : "pointer",
         }}
       >
-        {loading ? "Sending..." : "Send"}
+        {loading ? "Generating reply..." : "Send"}
       </button>
 
-      {/* Reply Box */}
+      {/* Reply card — MAKE SURE THIS IS VISIBLE */}
       {reply && (
         <div
           style={{
-            marginTop: "30px",
+            marginTop: "25px",
+            backgroundColor: "#FFEB3B", // bright yellow — visible
+            color: "#000", // true black text
             padding: "20px",
-            backgroundColor: "#ffffff",
-            borderRadius: "10px",
-            border: "1px solid #ddd",
-            color: "#000000", // <<< BLACK TEXT (now visible)
+            borderRadius: "12px",
             fontSize: "18px",
-            lineHeight: "1.5",
+            lineHeight: "1.6",
+            fontWeight: 500,
+            border: "2px solid #E6C75F", // soft gold border to pop
+            boxShadow: "0 6px 18px rgba(0,0,0,0.25)", // visible card shadow
+            // ensure no transparency:
+            opacity: 1,
           }}
         >
-          <strong>Reply:</strong> {reply}
+          <strong style={{ color: "#000" }}>Reply:</strong> {reply}
         </div>
       )}
     </main>
   );
-              }              }
+        }              }              }
