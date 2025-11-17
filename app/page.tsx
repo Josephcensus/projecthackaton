@@ -3,51 +3,81 @@
 import { useState } from "react";
 
 export default function Home() {
-  const [message, setMessage] = useState("");
-  const [reply, setReply] = useState("");
+  const [messages, setMessages] = useState([
+    { role: "assistant", content: "Hello! How can I help you today?" }
+  ]);
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const sendMessage = async () => {
-    if (!message.trim()) return;
+    if (!input.trim()) return;
 
-    const res = await fetch("/api/reply", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message }),
-    });
+    const userMessage = { role: "user", content: input };
+    setMessages((prev) => [...prev, userMessage]);
+    setInput("");
+    setLoading(true);
 
-    const data = await res.json();
-    setReply(data.reply);
+    try {
+      const res = await fetch("/api/reply", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: input }),
+      });
+
+      const data = await res.json();
+
+      if (data.reply) {
+        setMessages((prev) => [
+          ...prev,
+          { role: "assistant", content: data.reply },
+        ]);
+      }
+    } catch (err) {
+      console.error("Error:", err);
+    }
+
+    setLoading(false);
   };
 
   return (
-    <main className="min-h-screen bg-[#000000] text-white flex flex-col items-center px-4 py-10">
-      <h1 className="text-3xl font-bold mb-8">
-        CARV Hackathon Auto-Reply Agent 🤖
-      </h1>
+    <div className="flex flex-col h-screen p-4 bg-gray-100">
+      <div className="flex-1 overflow-y-auto space-y-3 mb-4">
+        {messages.map((msg, index) => (
+          <div
+            key={index}
+            className={`p-3 max-w-[80%] rounded-xl ${
+              msg.role === "user"
+                ? "bg-yellow-300 ml-auto text-black"
+                : "bg-white mr-auto text-black shadow"
+            }`}
+          >
+            {msg.content}
+          </div>
+        ))}
 
-      {/* Input Box */}
-      <textarea
-        className="w-full max-w-xl h-40 p-4 rounded-xl bg-white text-black outline-none"
-        placeholder="Type your message..."
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-      />
+        {loading && (
+          <div className="p-3 bg-white rounded-xl shadow mr-auto text-gray-600">
+            Typing...
+          </div>
+        )}
+      </div>
 
-      {/* Send Button */}
-      <button
-        onClick={sendMessage}
-        className="mt-4 w-full max-w-xl py-3 bg-purple-600 hover:bg-purple-700 rounded-xl text-lg font-semibold"
-      >
-        Send
-      </button>
-
-      {/* Reply Box */}
-      {reply && (
-        <div className="mt-6 w-full max-w-xl p-4 bg-white text-black rounded-xl shadow-md">
-          <p className="font-semibold">Reply:</p>
-          <p>{reply}</p>
-        </div>
-      )}
-    </main>
+      <div className="flex gap-2">
+        <input
+          type="text"
+          className="flex-1 p-3 border rounded-xl"
+          placeholder="Type your message..."
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+        />
+        <button
+          onClick={sendMessage}
+          className="px-4 py-2 bg-yellow-400 rounded-xl"
+        >
+          Send
+        </button>
+      </div>
+    </div>
   );
 }
