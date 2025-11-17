@@ -20,7 +20,7 @@ export async function POST(req: Request) {
     });
 
     return Response.json({
-      reply: completion.choices[0].message.content
+      reply: completion.choices[0].message?.content || ""
     });
 
   } catch (error) {
