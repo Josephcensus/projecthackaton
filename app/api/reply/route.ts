@@ -5,13 +5,16 @@ export async function POST(req: Request) {
     const { message } = await req.json();
 
     const client = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY!
+      apiKey: process.env.OPENAI_API_KEY!,
     });
 
     const completion = await client.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
-        { role: "system", content: "You are a CARV support assistant. Only answer questions about CARV, gaming, web3, and related topics." },
+        {
+          role: "system",
+          content: "You are a support assistant. Only answer user questions politely."
+        },
         { role: "user", content: message }
       ]
     });
@@ -19,6 +22,7 @@ export async function POST(req: Request) {
     return Response.json({
       reply: completion.choices[0].message.content
     });
+
   } catch (error) {
     console.error(error);
     return Response.json(
